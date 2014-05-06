@@ -182,4 +182,23 @@ public class RegionUtils extends MyRegionUtils {
 		return result;
 	}
 
+	/** Все суперрегионы, граничащие с данным
+	 * 
+	 * @param superRegion
+	 * @return */
+	public static LinkedList<SuperRegion> getNeighborSuperRegions(SuperRegion superRegion) {
+		LinkedList<SuperRegion> neighborSuperRegions = new LinkedList<SuperRegion>();
+		LinkedList<Region> regions = superRegion.getSubRegions();
+		for (Region region : regions) {
+			LinkedList<Region> neighbors = region.getNeighbors();
+			for (Region neighbor : neighbors) {
+				SuperRegion neighborSuperRegion = neighbor.getSuperRegion();
+				if (neighborSuperRegion.getId() != superRegion.getId() && !neighborSuperRegions.contains(neighborSuperRegion)) {
+					neighborSuperRegions.add(neighborSuperRegion);
+				}
+			}
+		}
+		return neighborSuperRegions;
+	}
+
 }

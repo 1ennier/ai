@@ -2,14 +2,14 @@ package strategy;
 
 public class Context {
 
-	private IStrategy strategy;
+	private IPickStrategy strategyPick;
 
-	public void setStrategy(IStrategy strategy) {
-		this.strategy = strategy;
+	public void setStrategyPick(IPickStrategy strategy) {
+		this.strategyPick = strategy;
 	}
 
-	public void executeStrategy() {
-		strategy.execute();
+	public IPickStrategy getStrategyPick() {
+		return strategyPick;
 	}
 
 }

@@ -1,5 +1,6 @@
 package bot;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -11,8 +12,9 @@ import move.AttackTransferMove;
 import move.AttackTransferMove.MOVE_TYPE;
 import move.PlaceArmiesMove;
 import state.GlobalState;
-import strategy.IPickStrategy;
+import strategy.Context;
 import strategy.impl.SimplePickStrategy;
+import temp.RegionPickWeight;
 import utils.ArmyPlaceUtils;
 import utils.AttackUtils;
 import utils.RegionAttackInfo;
@@ -21,23 +23,33 @@ import utils.comparator.RegionArmiesComparator;
 
 public class Bot implements IBot {
 
-	private IPickStrategy pickStrategy;
+	private Context context;
 
 	public static void main(String[] args) {
+
+		try {
+			RegionPickWeight.init();
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
+
 		Bot bot = new Bot();
-		bot.setPickStrategy(new SimplePickStrategy());
+		Context ctx = new Context();
+		ctx.setStrategyPick(new SimplePickStrategy());
+		bot.setContext(ctx);
 		BotParser parser = new BotParser(bot);
 		parser.run();
 	}
 
-	public void setPickStrategy(IPickStrategy pickStrategy) {
-		this.pickStrategy = pickStrategy;
+	public void setContext(Context context) {
+		this.context = context;
 	}
 
 	@Override
 	public ArrayList<Region> getPreferredStartingRegions(Long timeOut) {
-		pickStrategy.execute();
-		return pickStrategy.getPrefferedStartingRegions();
+		context.getStrategyPick().execute();
+		return context.getStrategyPick().getPrefferedStartingRegions();
 	}
 
 	@Override
