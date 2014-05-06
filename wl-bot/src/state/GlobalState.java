@@ -17,6 +17,9 @@ public class GlobalState {
 	private static final Map fullMap = new Map();
 
 	private static ArrayList<Region> pickableStartingRegions = new ArrayList<Region>();
+	private static ArrayList<Integer> preferredStartingRegionIds = new ArrayList<Integer>();
+
+	private static ArrayList<Integer> opponentPickIds = new ArrayList<Integer>();
 
 	private static CurrentState state = new CurrentState();
 
@@ -72,6 +75,28 @@ public class GlobalState {
 
 	public static EdgeWeightedDigraph getGraph() {
 		return graph;
+	}
+
+	public static void addPreferredStartingRegionId(int id) {
+		preferredStartingRegionIds.add(id);
+	}
+
+	public static ArrayList<Integer> getPreferredStartingRegionIds() {
+		return preferredStartingRegionIds;
+	}
+
+	public static void addOpponentPickId(Integer region) {
+		if (!opponentPickIds.contains(region)) {
+			opponentPickIds.add(region);
+		}
+	}
+
+	public static void removeOpponentPickId(Integer region) {
+		opponentPickIds.remove(region);
+	}
+
+	public static ArrayList<Integer> getOpponentPickIds() {
+		return opponentPickIds;
 	}
 
 }

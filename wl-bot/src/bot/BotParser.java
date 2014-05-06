@@ -157,6 +157,9 @@ public class BotParser {
 		long timeOut = Long.valueOf(params[1]);
 		setPickableStartingRegions(params);
 		ArrayList<Region> preferredStartingRegions = bot.getPreferredStartingRegions(timeOut);
+		for (Region region : preferredStartingRegions) {
+			GlobalState.addPreferredStartingRegionId(region.getId());
+		}
 		String output = "";
 		for (Region region : preferredStartingRegions) {
 			output = output.concat(region.getId() + " ");
@@ -212,8 +215,6 @@ public class BotParser {
 	}
 
 	private void updateMap(String[] params) {
-		int roundNum = GlobalState.getCurrentState().getRoundNumber();
-
 		Map visibleMap = GlobalState.getFullMap().getMapCopy();
 		for (int i = 1; i < params.length; i++) {
 			try {
@@ -242,6 +243,26 @@ public class BotParser {
 		}
 
 		GlobalState.getCurrentState().setVisibleMap(visibleMap);
+
+		if (GlobalState.getCurrentState().getRoundNumber() == 1) {
+			checkOpponentPicks();
+		}
+	}
+
+	private void checkOpponentPicks() {
+		ArrayList<Integer> preferredIds = GlobalState.getPreferredStartingRegionIds();
+		int myCount = 0;
+		for (int id : preferredIds) {
+			if (myCount == 3) {
+				break;
+			}
+			Region region = GlobalState.getCurrentState().getVisibleMap().getRegion(id);
+			if (region != null && region.ownedByPlayer(GlobalState.getMyName())) {
+				myCount++;
+				continue;
+			}
+			GlobalState.addOpponentPickId(id);
+		}
 	}
 
 	private void opponentMoves(String[] params) {
