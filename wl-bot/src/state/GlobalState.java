@@ -3,14 +3,9 @@ package state;
 import graph.EdgeWeightedDigraph;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
 
 import main.Map;
 import main.Region;
-import main.SuperRegion;
-import utils.Weight.SuperRegionPick;
-import utils.comparator.desc.SuperRegionBonusSizeDescComparator;
 
 public class GlobalState {
 
@@ -79,18 +74,4 @@ public class GlobalState {
 		return graph;
 	}
 
-	public static void initSuperRegionWeightPick() {
-		LinkedList<SuperRegion> superRegions = new LinkedList<SuperRegion>(fullMap.getSuperRegions());
-		Collections.sort(superRegions, new SuperRegionBonusSizeDescComparator());
-		int value = 0;
-		int currentBonusSize = superRegions.getFirst().getArmiesReward();
-		for (SuperRegion superRegion : superRegions) {
-			if (superRegion.getArmiesReward() != currentBonusSize) {
-				value++;
-			}
-			superRegion.incWeightPick(value, SuperRegionPick.BONUS);
-			currentBonusSize = superRegion.getArmiesReward();
-		}
-
-	}
 }

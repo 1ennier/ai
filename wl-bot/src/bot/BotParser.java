@@ -114,8 +114,6 @@ public class BotParser {
 				System.err.println("Unable to parse SuperRegions: " + e.getMessage());
 			}
 		}
-
-		GlobalState.initSuperRegionWeightPick();
 	}
 
 	private void setRegions(String[] params) {

@@ -1,6 +1,5 @@
 package bot;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -27,12 +26,14 @@ public class Bot implements IBot {
 
 	public static void main(String[] args) {
 
-		try {
-			RegionPickWeight.init();
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
+		//		try {
+		//			RegionPickWeight.initByFile();
+		//		} catch (IOException e) {
+		//			e.printStackTrace();
+		//			System.exit(1);
+		//		}
+
+		RegionPickWeight.initManually();
 
 		Bot bot = new Bot();
 		Context ctx = new Context();
