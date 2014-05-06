@@ -26,6 +26,10 @@ public class Bot implements IBot {
 
 	public static void main(String[] args) {
 
+		if (args != null) {
+			GlobalState.debug = true;
+		}
+
 		//		try {
 		//			RegionPickWeight.initByFile();
 		//		} catch (IOException e) {

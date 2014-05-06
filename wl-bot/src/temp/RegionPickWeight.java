@@ -21,7 +21,7 @@ public class RegionPickWeight {
 
 	public static void initManually() {
 		p = new Properties();
-		p.setProperty(PROP.superRegionBonus.name(), "8");
+		p.setProperty(PROP.superRegionBonus.name(), "10");
 		p.setProperty(PROP.sameSuperRegionAndNear.name(), "4");
 		p.setProperty(PROP.neighbor.name(), "2");
 		p.setProperty(PROP.nearBonuses.name(), "1");

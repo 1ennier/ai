@@ -9,6 +9,8 @@ import main.Region;
 
 public class GlobalState {
 
+	public static boolean debug;
+
 	private static String myName = "";
 	private static String opponentName = "";
 	private static String neutralName = "neutral";

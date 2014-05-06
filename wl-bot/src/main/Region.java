@@ -23,6 +23,24 @@ public class Region extends AbstractRegion {
 
 	private DijkstraSP shortestPaths;
 
+	private double weightPick;
+	private double pickCoeff = 1;
+
+	public void incWeightPick(int multiplier) {
+		if (GlobalState.debug) {
+			System.out.println(this + ": add " + multiplier + "*" + pickCoeff);
+		}
+		weightPick += pickCoeff * multiplier;
+	}
+
+	public double getWeightPick() {
+		return weightPick;
+	}
+
+	public void setPickCoeff(double coeff) {
+		this.pickCoeff = coeff;
+	}
+
 	private Region(SuperRegion superRegion, int id) {
 		super();
 		this.id = id;
@@ -357,7 +375,11 @@ public class Region extends AbstractRegion {
 
 	@Override
 	protected String getName() {
-		return RegionName.getName(id, armies);
+		String result = RegionName.getName(id, armies);
+		if (GlobalState.debug) {
+			result += " [wp:" + weightPick + "]";
+		}
+		return result;
 	}
 
 }
