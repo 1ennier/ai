@@ -26,8 +26,12 @@ public class Bot implements IBot {
 
 	public static void main(String[] args) {
 
-		if (args != null) {
-			GlobalState.debug = true;
+		if (args != null && args.length > 0) {
+			for (String arg : args) {
+				if (arg.equals("debug")) {
+					GlobalState.debug = true;
+				}
+			}
 		}
 
 		//		try {
