@@ -72,7 +72,15 @@ public class Bot implements IBot {
 		return GlobalState.getCurrentState().getAttackTransferMoves();
 	}
 
+	private void putPlaceWeights() {
+		LinkedList<Region> myRegions = RegionUtils.getMyRegions();
+
+	}
+
 	private void generateMoves() {
+
+		putPlaceWeights();
+
 		// Если есть противник, то все войска кладем на границу (чуток оставляем если есть тема захватить бонус)
 		if (!RegionUtils.getMyRegionsNearOpponent().isEmpty()) {
 			ArmyPlaceUtils.placeArmiesIfHasOpponent();

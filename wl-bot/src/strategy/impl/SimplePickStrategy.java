@@ -46,9 +46,11 @@ public class SimplePickStrategy implements IPickStrategy {
 
 		Collections.sort(GlobalState.getPickableStartingRegions(), new RegionWeightPickDescComparator());
 
-		if (GlobalState.debug) {
-			for (Region region : GlobalState.getPickableStartingRegions()) {
+		for (Region region : GlobalState.getPickableStartingRegions()) {
+			if (GlobalState.debug) {
 				System.out.println(region);
+			} else {
+				System.err.println(region);
 			}
 		}
 
@@ -109,17 +111,12 @@ public class SimplePickStrategy implements IPickStrategy {
 			}
 		}
 
-		int minBonus = Integer.MAX_VALUE;
-		for (SuperRegion superRegion : superRegions) {
-			int bonus = superRegion.getArmiesReward();
-			if (bonus < minBonus) {
-				minBonus = bonus;
-			}
-		}
-
-		if (regions != null) {
-			for (Region region : regions) {
-				region.incWeightPick(RegionPickWeight.getProp(PROP.sameSuperRegionAndNear));
+		for (List<Region> list : thisSuperRegionAndNear.values()) {
+			int size = list.size();
+			if (size == maxSize) {
+				for (Region region : regions) {
+					region.incWeightPick(RegionPickWeight.getProp(PROP.sameSuperRegionAndNear));
+				}
 			}
 		}
 	}

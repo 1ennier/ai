@@ -29,6 +29,8 @@ public class Region extends AbstractRegion {
 	public void incWeightPick(int multiplier) {
 		if (GlobalState.debug) {
 			System.out.println(this + ": add " + multiplier + "*" + pickCoeff);
+		} else {
+			System.err.println(this + ": add " + multiplier + "*" + pickCoeff);
 		}
 		weightPick += pickCoeff * multiplier;
 	}
