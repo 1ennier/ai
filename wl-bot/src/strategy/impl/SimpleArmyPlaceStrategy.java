@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import main.Region;
 import main.SuperRegion;
 import move.PlaceArmiesMove;
-import state.GlobalState;
 import strategy.IPlaceArmiesStrategy;
 import utils.RegionUtils;
 import weight.RegionWeightArmyPlace;
@@ -58,21 +57,16 @@ public class SimpleArmyPlaceStrategy implements IPlaceArmiesStrategy {
 
 	private void processPossibleBonus(Region region) {
 		SuperRegion superRegion = region.getSuperRegion();
-		LinkedList<Region> regions = superRegion.getSubRegions();
-		boolean neutralsAndUnknown = true;
-		for (Region subregion : regions) {
-			if (!subregion.ownedByPlayer(GlobalState.getNeutralName()) && !subregion.ownedByPlayer(GlobalState.getUnknownName())) {
-				neutralsAndUnknown = false;
-				break;
-			}
-		}
-		if (neutralsAndUnknown) {
+		if (superRegion.isPossiblyFree()) {
 			region.incWeightArmyPlace(RegionWeightArmyPlace.getProp(PROP.possibleBonus));
 		}
 
 		LinkedList<Region> otherBonusNeighbors = region.getMyRegionOtherSuperRegionNeutralNeighbors();
-		if (!otherBonusNeighbors.isEmpty()) {
-			region.incWeightArmyPlace(RegionWeightArmyPlace.getProp(PROP.freeBonus));
+		for (Region neighbor : otherBonusNeighbors) {
+			SuperRegion neighborSuperRegion = neighbor.getSuperRegion();
+			if (neighborSuperRegion.isPossiblyFree()) {
+				region.incWeightArmyPlace(RegionWeightArmyPlace.getProp(PROP.possibleBonus));
+			}
 		}
 	}
 

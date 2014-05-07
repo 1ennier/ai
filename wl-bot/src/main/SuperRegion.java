@@ -91,6 +91,18 @@ public class SuperRegion extends AbstractRegion {
 		return true;
 	}
 
+	/** Бонус открыт не полностью и на нем нет противников
+	 * 
+	 * @return */
+	public boolean isPossiblyFree() {
+		for (Region subregion : subRegions) {
+			if (!subregion.ownedByPlayer(GlobalState.getNeutralName()) && !subregion.ownedByPlayer(GlobalState.getUnknownName())) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	@Override
 	public String getName() {
 		return SuperRegionName.getName(id);
