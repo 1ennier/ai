@@ -254,6 +254,19 @@ public class Region extends AbstractRegion {
 		return neutralNeighbors;
 	}
 
+	public LinkedList<Region> getMyRegionOtherSuperRegionNeutralNeighbors() {
+		LinkedList<Region> neutralNeighbors = new LinkedList<Region>(neighbors);
+		Iterator<Region> it = neutralNeighbors.iterator();
+		while (it.hasNext()) {
+			Region neighbor = it.next();
+			if (neighbor.ownedByPlayer(GlobalState.getMyName()) || neighbor.ownedByPlayer(GlobalState.getOpponentName())
+					|| neighbor.getSuperRegion().equals(superRegion)) {
+				it.remove();
+			}
+		}
+		return neutralNeighbors;
+	}
+
 	public LinkedList<Region> getMyRegionOpponentNeighbors() {
 		LinkedList<Region> opponentNeighbors = new LinkedList<Region>(neighbors);
 		Iterator<Region> it = opponentNeighbors.iterator();

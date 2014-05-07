@@ -55,7 +55,7 @@ public class CurrentState {
 		secondMoves = new ArrayList<AttackTransferMove>();
 
 		if (GlobalState.debug) {
-			System.err.println(" --- Round " + roundNumber + " ---");
+			System.err.println("--- Round " + roundNumber + " ---");
 		}
 	}
 

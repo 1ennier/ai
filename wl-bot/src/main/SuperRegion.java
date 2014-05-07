@@ -79,6 +79,18 @@ public class SuperRegion extends AbstractRegion {
 		return armies;
 	}
 
+	/** Бонус полностью открыт и на нем нет противников (только нейтралы)
+	 * 
+	 * @return */
+	public boolean isFree() {
+		for (Region subregion : subRegions) {
+			if (!subregion.ownedByPlayer(GlobalState.getNeutralName())) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	@Override
 	public String getName() {
 		return SuperRegionName.getName(id);

@@ -23,6 +23,7 @@ public class SimpleArmyPlaceStrategy implements IPlaceArmiesStrategy {
 			processInner(region);
 			processOpponentNear(region);
 			processFreeBonus(region);
+			processPossibleBonus(region);
 		}
 	}
 
@@ -42,13 +43,37 @@ public class SimpleArmyPlaceStrategy implements IPlaceArmiesStrategy {
 
 	private void processFreeBonus(Region region) {
 		SuperRegion superRegion = region.getSuperRegion();
-		LinkedList<Region> regions = superRegion.getSubRegions();
-		for (Region subregion : regions) {
-			if (subregion.ownedByPlayer(GlobalState.getUnknownName()) || subregion.ownedByPlayer(GlobalState.getOpponentName())) {
-				return;
+		if (superRegion.isFree()) {
+			region.incWeightArmyPlace(RegionWeightArmyPlace.getProp(PROP.freeBonus));
+		}
+
+		LinkedList<Region> otherBonusNeighbors = region.getMyRegionOtherSuperRegionNeutralNeighbors();
+		for (Region neighbor : otherBonusNeighbors) {
+			SuperRegion neighborSuperRegion = neighbor.getSuperRegion();
+			if (neighborSuperRegion.isFree()) {
+				region.incWeightArmyPlace(RegionWeightArmyPlace.getProp(PROP.freeBonus));
 			}
 		}
-		region.incWeightArmyPlace(RegionWeightArmyPlace.getProp(PROP.freeBonus));
+	}
+
+	private void processPossibleBonus(Region region) {
+		SuperRegion superRegion = region.getSuperRegion();
+		LinkedList<Region> regions = superRegion.getSubRegions();
+		boolean neutralsAndUnknown = true;
+		for (Region subregion : regions) {
+			if (!subregion.ownedByPlayer(GlobalState.getNeutralName()) && !subregion.ownedByPlayer(GlobalState.getUnknownName())) {
+				neutralsAndUnknown = false;
+				break;
+			}
+		}
+		if (neutralsAndUnknown) {
+			region.incWeightArmyPlace(RegionWeightArmyPlace.getProp(PROP.possibleBonus));
+		}
+
+		LinkedList<Region> otherBonusNeighbors = region.getMyRegionOtherSuperRegionNeutralNeighbors();
+		if (!otherBonusNeighbors.isEmpty()) {
+			region.incWeightArmyPlace(RegionWeightArmyPlace.getProp(PROP.freeBonus));
+		}
 	}
 
 	@Override
