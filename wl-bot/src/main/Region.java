@@ -31,8 +31,6 @@ public class Region extends AbstractRegion {
 
 	public void incWeightPick(int multiplier) {
 		if (GlobalState.debugPick) {
-			System.out.println(this + ": add " + multiplier + "*" + coeffPick);
-		} else {
 			System.err.println(this + ": add " + multiplier + "*" + coeffPick);
 		}
 		weightPick += coeffPick * multiplier;
@@ -48,8 +46,6 @@ public class Region extends AbstractRegion {
 
 	public void incWeightArmyPlace(int multiplier) {
 		if (GlobalState.debugArmyPlace) {
-			System.out.println(this + ": add " + multiplier + "*" + coeffArmyPlace);
-		} else {
 			System.err.println(this + ": add " + multiplier + "*" + coeffArmyPlace);
 		}
 		weightArmyPlace += coeffArmyPlace * multiplier;

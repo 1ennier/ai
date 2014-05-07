@@ -9,6 +9,7 @@ import main.Region;
 
 public class GlobalState {
 
+	public static boolean debug;
 	public static boolean debugPick;
 	public static boolean debugArmyPlace;
 	public static boolean debugAttack;

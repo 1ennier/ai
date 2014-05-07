@@ -48,8 +48,6 @@ public class SimplePickStrategy implements IPickStrategy {
 
 		for (Region region : GlobalState.getPickableStartingRegions()) {
 			if (GlobalState.debugPick) {
-				System.out.println(region);
-			} else {
 				System.err.println(region);
 			}
 		}

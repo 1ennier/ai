@@ -53,6 +53,10 @@ public class CurrentState {
 		attackedRegions = new LinkedList<Region>();
 		firstMoves = new ArrayList<AttackTransferMove>();
 		secondMoves = new ArrayList<AttackTransferMove>();
+
+		if (GlobalState.debug) {
+			System.err.println(" --- Round " + roundNumber + " ---");
+		}
 	}
 
 	public int getStartingArmies() {
