@@ -12,13 +12,14 @@ import move.AttackTransferMove.MOVE_TYPE;
 import move.PlaceArmiesMove;
 import state.GlobalState;
 import strategy.Context;
+import strategy.impl.SimpleArmyPlaceStrategy;
 import strategy.impl.SimplePickStrategy;
 import utils.ArmyPlaceUtils;
 import utils.AttackUtils;
 import utils.RegionAttackInfo;
 import utils.RegionUtils;
 import utils.comparator.RegionArmiesComparator;
-import weight.RegionPickWeight;
+import weight.RegionWeightPick;
 
 public class Bot implements IBot {
 
@@ -28,8 +29,11 @@ public class Bot implements IBot {
 
 		if (args != null && args.length > 0) {
 			for (String arg : args) {
-				if (arg.equals("debug")) {
-					GlobalState.debug = true;
+				if (arg.equals("debugPick")) {
+					GlobalState.debugPick = true;
+				}
+				if (arg.equals("debugArmyPlace")) {
+					GlobalState.debugArmyPlace = true;
 				}
 			}
 		}
@@ -41,11 +45,12 @@ public class Bot implements IBot {
 		//			System.exit(1);
 		//		}
 
-		RegionPickWeight.initManually();
+		RegionWeightPick.initManually();
 
 		Bot bot = new Bot();
 		Context ctx = new Context();
 		ctx.setStrategyPick(new SimplePickStrategy());
+		ctx.setStrategyPlaceArmies(new SimpleArmyPlaceStrategy());
 		bot.setContext(ctx);
 		BotParser parser = new BotParser(bot);
 		parser.run();
@@ -63,8 +68,11 @@ public class Bot implements IBot {
 
 	@Override
 	public ArrayList<PlaceArmiesMove> getPlaceArmiesMoves(Long timeOut) {
-		generateMoves();
-		return GlobalState.getCurrentState().getPlaceArmiesMoves();
+		context.getStrategyPlaceArmies().execute();
+		return context.getStrategyPlaceArmies().getMoves();
+
+		//		generateMoves();
+		//		return GlobalState.getCurrentState().getPlaceArmiesMoves();
 	}
 
 	@Override
@@ -72,15 +80,7 @@ public class Bot implements IBot {
 		return GlobalState.getCurrentState().getAttackTransferMoves();
 	}
 
-	private void putRegionWeights() {
-		LinkedList<Region> myRegions = RegionUtils.getMyRegions();
-
-	}
-
 	private void generateMoves() {
-
-		putRegionWeights();
-
 		// Если есть противник, то все войска кладем на границу (чуток оставляем если есть тема захватить бонус)
 		if (!RegionUtils.getMyRegionsNearOpponent().isEmpty()) {
 			ArmyPlaceUtils.placeArmiesIfHasOpponent();

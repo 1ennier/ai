@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class RegionPickWeight {
+public class RegionWeightPick {
 
 	private static Properties p;
 
@@ -14,7 +14,7 @@ public class RegionPickWeight {
 
 	public static void initByFile() throws IOException {
 		p = new Properties();
-		InputStream fis = RegionPickWeight.class.getResourceAsStream("/regionpick.properties");
+		InputStream fis = RegionWeightPick.class.getResourceAsStream("/regionpick.properties");
 		p.load(fis);
 		fis.close();
 	}

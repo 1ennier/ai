@@ -15,8 +15,8 @@ import utils.RegionUtils;
 import utils.comparator.RegionIdComparator;
 import utils.comparator.SuperRegionBonusSizeComparator;
 import utils.comparator.desc.RegionWeightPickDescComparator;
-import weight.RegionPickWeight;
-import weight.RegionPickWeight.PROP;
+import weight.RegionWeightPick;
+import weight.RegionWeightPick.PROP;
 
 public class SimplePickStrategy implements IPickStrategy {
 
@@ -47,7 +47,7 @@ public class SimplePickStrategy implements IPickStrategy {
 		Collections.sort(GlobalState.getPickableStartingRegions(), new RegionWeightPickDescComparator());
 
 		for (Region region : GlobalState.getPickableStartingRegions()) {
-			if (GlobalState.debug) {
+			if (GlobalState.debugPick) {
 				System.out.println(region);
 			} else {
 				System.err.println(region);
@@ -75,8 +75,8 @@ public class SimplePickStrategy implements IPickStrategy {
 		for (Region region : pickableRegions) {
 			SuperRegion sr = region.getSuperRegion();
 			double coeff = 1 - (3.0 * (sr.getArmiesReward() - minBonus) / 10);
-			region.setPickCoeff(coeff);
-			region.incWeightPick(RegionPickWeight.getProp(PROP.superRegionBonus));
+			region.setCoeffPick(coeff);
+			region.incWeightPick(RegionWeightPick.getProp(PROP.superRegionBonus));
 		}
 	}
 
@@ -115,7 +115,7 @@ public class SimplePickStrategy implements IPickStrategy {
 			int size = list.size();
 			if (size == maxSize) {
 				for (Region region : regions) {
-					region.incWeightPick(RegionPickWeight.getProp(PROP.sameSuperRegionAndNear));
+					region.incWeightPick(RegionWeightPick.getProp(PROP.sameSuperRegionAndNear));
 				}
 			}
 		}
@@ -130,8 +130,8 @@ public class SimplePickStrategy implements IPickStrategy {
 				}
 
 				if (region.getNeighbors().contains(otherRegion)) {
-					region.incWeightPick(RegionPickWeight.getProp(PROP.neighbor));
-					otherRegion.incWeightPick(RegionPickWeight.getProp(PROP.neighbor));
+					region.incWeightPick(RegionWeightPick.getProp(PROP.neighbor));
+					otherRegion.incWeightPick(RegionWeightPick.getProp(PROP.neighbor));
 				}
 			}
 		}
@@ -160,7 +160,7 @@ public class SimplePickStrategy implements IPickStrategy {
 		for (Region region : nears.keySet()) {
 			SuperRegion near = nears.get(region);
 			if (near.getArmiesReward() == minBonus) {
-				region.incWeightPick(RegionPickWeight.getProp(PROP.nearBonuses));
+				region.incWeightPick(RegionWeightPick.getProp(PROP.nearBonuses));
 			}
 		}
 	}

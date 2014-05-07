@@ -24,23 +24,43 @@ public class Region extends AbstractRegion {
 	private DijkstraSP shortestPaths;
 
 	private double weightPick;
-	private double pickCoeff = 1;
+	private double coeffPick = 1;
+
+	private double weightArmyPlace;
+	private double coeffArmyPlace = 1;
 
 	public void incWeightPick(int multiplier) {
-		if (GlobalState.debug) {
-			System.out.println(this + ": add " + multiplier + "*" + pickCoeff);
+		if (GlobalState.debugPick) {
+			System.out.println(this + ": add " + multiplier + "*" + coeffPick);
 		} else {
-			System.err.println(this + ": add " + multiplier + "*" + pickCoeff);
+			System.err.println(this + ": add " + multiplier + "*" + coeffPick);
 		}
-		weightPick += pickCoeff * multiplier;
+		weightPick += coeffPick * multiplier;
 	}
 
 	public double getWeightPick() {
 		return weightPick;
 	}
 
-	public void setPickCoeff(double coeff) {
-		this.pickCoeff = coeff;
+	public void setCoeffPick(double coeff) {
+		this.coeffPick = coeff;
+	}
+
+	public void incWeightArmyPlace(int multiplier) {
+		if (GlobalState.debugArmyPlace) {
+			System.out.println(this + ": add " + multiplier + "*" + coeffArmyPlace);
+		} else {
+			System.err.println(this + ": add " + multiplier + "*" + coeffArmyPlace);
+		}
+		weightArmyPlace += coeffArmyPlace * multiplier;
+	}
+
+	public double getWeightArmyPlace() {
+		return weightArmyPlace;
+	}
+
+	public void setCoeffArmyPlace(double coeff) {
+		this.coeffArmyPlace = coeff;
 	}
 
 	private Region(SuperRegion superRegion, int id) {
@@ -378,8 +398,11 @@ public class Region extends AbstractRegion {
 	@Override
 	protected String getName() {
 		String result = RegionName.getName(id, armies);
-		if (GlobalState.debug) {
+		if (GlobalState.debugPick) {
 			result += " [wp:" + weightPick + "]";
+		}
+		if (GlobalState.debugArmyPlace) {
+			result += " [ap:" + weightArmyPlace + "]";
 		}
 		return result;
 	}
