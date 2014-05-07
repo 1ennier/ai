@@ -11,12 +11,12 @@ import main.Region;
 import main.SuperRegion;
 import state.GlobalState;
 import strategy.IPickStrategy;
-import temp.RegionPickWeight;
-import temp.RegionPickWeight.PROP;
 import utils.RegionUtils;
 import utils.comparator.RegionIdComparator;
 import utils.comparator.SuperRegionBonusSizeComparator;
 import utils.comparator.desc.RegionWeightPickDescComparator;
+import weight.RegionPickWeight;
+import weight.RegionPickWeight.PROP;
 
 public class SimplePickStrategy implements IPickStrategy {
 

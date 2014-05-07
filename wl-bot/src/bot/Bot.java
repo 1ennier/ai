@@ -13,12 +13,12 @@ import move.PlaceArmiesMove;
 import state.GlobalState;
 import strategy.Context;
 import strategy.impl.SimplePickStrategy;
-import temp.RegionPickWeight;
 import utils.ArmyPlaceUtils;
 import utils.AttackUtils;
 import utils.RegionAttackInfo;
 import utils.RegionUtils;
 import utils.comparator.RegionArmiesComparator;
+import weight.RegionPickWeight;
 
 public class Bot implements IBot {
 
@@ -72,14 +72,14 @@ public class Bot implements IBot {
 		return GlobalState.getCurrentState().getAttackTransferMoves();
 	}
 
-	private void putPlaceWeights() {
+	private void putRegionWeights() {
 		LinkedList<Region> myRegions = RegionUtils.getMyRegions();
 
 	}
 
 	private void generateMoves() {
 
-		putPlaceWeights();
+		putRegionWeights();
 
 		// Если есть противник, то все войска кладем на границу (чуток оставляем если есть тема захватить бонус)
 		if (!RegionUtils.getMyRegionsNearOpponent().isEmpty()) {
