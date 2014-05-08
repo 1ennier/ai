@@ -19,12 +19,18 @@ public class SimpleAttackStrategy implements IStrategyAttack {
 	public void execute() {
 		moves.clear();
 
-		LinkedList<Region> visibleRegions = new LinkedList<Region>(GlobalState.getCurrentState().getVisibleMap().getRegions());
+		LinkedList<Region> visibleRegions = GlobalState.getCurrentState().getVisibleMap().getRegions();
 		for (Region region : visibleRegions) {
 			processRegionAttackWeight(region);
 		}
 
 		calculateAttacks();
+
+		if (GlobalState.debugAttack) {
+			for (Region region : visibleRegions) {
+				System.err.println(region + ": attack weight is " + region.getWeightAttack());
+			}
+		}
 	}
 
 	private void processRegionAttackWeight(Region region) {
@@ -50,6 +56,9 @@ public class SimpleAttackStrategy implements IStrategyAttack {
 	}
 
 	private void calculateAttacks() {
+		if (GlobalState.debugAttack) {
+			System.err.println("* Attacks *");
+		}
 		LinkedList<Region> myRegions = RegionUtils.getMyRegions();
 		for (Region myRegion : myRegions) {
 			if (myRegion.getFreeArmies() == 0) {
@@ -64,6 +73,7 @@ public class SimpleAttackStrategy implements IStrategyAttack {
 			}
 
 		}
+
 	}
 
 	@Override
