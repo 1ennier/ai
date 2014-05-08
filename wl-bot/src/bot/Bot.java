@@ -20,6 +20,7 @@ import utils.RegionAttackInfo;
 import utils.RegionUtils;
 import utils.comparator.RegionArmiesComparator;
 import weight.RegionWeightArmyPlace;
+import weight.RegionWeightAttack;
 import weight.RegionWeightPick;
 
 public class Bot implements IBot {
@@ -39,6 +40,9 @@ public class Bot implements IBot {
 				if (arg.equals("debugArmyPlace")) {
 					GlobalState.debugArmyPlace = true;
 				}
+				if (arg.equals("debugAttack")) {
+					GlobalState.debugAttack = true;
+				}
 			}
 		}
 
@@ -51,13 +55,16 @@ public class Bot implements IBot {
 
 		RegionWeightPick.initManually();
 		RegionWeightArmyPlace.initManually();
+		RegionWeightAttack.initManually();
 
 		GlobalState.debug = true;
-		GlobalState.debugArmyPlace = true;
+		//		GlobalState.debugArmyPlace = true;
+		GlobalState.debugAttack = true;
 
 		Bot bot = new Bot();
 		Context ctx = new Context();
 		ctx.setStrategyPick(new SimplePickStrategy());
+		ctx.setStrategyPlaceArmies(new SimpleArmyPlaceStrategy());
 		ctx.setStrategyPlaceArmies(new SimpleArmyPlaceStrategy());
 		bot.setContext(ctx);
 		BotParser parser = new BotParser(bot);
@@ -85,6 +92,9 @@ public class Bot implements IBot {
 
 	@Override
 	public ArrayList<AttackTransferMove> getAttackTransferMoves(Long timeOut) {
+		context.getStrategyAttack().execute();
+		//		return context.getStrategyAttack().getMoves();
+
 		return GlobalState.getCurrentState().getAttackTransferMoves();
 	}
 

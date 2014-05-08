@@ -9,7 +9,7 @@ public class RegionWeightAttack {
 	private static Properties p;
 
 	public enum PROP {
-		opponentNear, possibleBonus
+		opponent, neutralInFreeBonus, neutralInPossibleFreeBonus, neutral
 	}
 
 	public static void initByFile() throws IOException {
@@ -21,8 +21,10 @@ public class RegionWeightAttack {
 
 	public static void initManually() {
 		p = new Properties();
-		p.setProperty(PROP.opponentNear.name(), "4");
-		p.setProperty(PROP.possibleBonus.name(), "1");
+		p.setProperty(PROP.opponent.name(), "8");
+		p.setProperty(PROP.neutralInFreeBonus.name(), "4");
+		p.setProperty(PROP.neutralInPossibleFreeBonus.name(), "2");
+		p.setProperty(PROP.neutral.name(), "1");
 	}
 
 	public static int getProp(PROP prop) {

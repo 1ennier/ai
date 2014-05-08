@@ -10,7 +10,7 @@ import java.util.Map;
 import main.Region;
 import main.SuperRegion;
 import state.GlobalState;
-import strategy.IPickStrategy;
+import strategy.IStrategyPick;
 import utils.RegionUtils;
 import utils.comparator.RegionIdComparator;
 import utils.comparator.SuperRegionBonusSizeComparator;
@@ -18,7 +18,7 @@ import utils.comparator.desc.RegionWeightPickDescComparator;
 import weight.RegionWeightPick;
 import weight.RegionWeightPick.PROP;
 
-public class SimplePickStrategy implements IPickStrategy {
+public class SimplePickStrategy implements IStrategyPick {
 
 	private ArrayList<Region> preferredStartingRegions = new ArrayList<Region>();
 

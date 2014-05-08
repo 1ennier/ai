@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import move.PlaceArmiesMove;
 
-public interface IPlaceArmiesStrategy extends IStrategy {
+public interface IStrategyPlaceArmies extends IStrategy {
 
 	public ArrayList<PlaceArmiesMove> getMoves();
 

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import main.Region;
 
-public interface IPickStrategy extends IStrategy {
+public interface IStrategyPick extends IStrategy {
 
 	public ArrayList<Region> getPrefferedStartingRegions();
 

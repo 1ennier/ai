@@ -9,14 +9,14 @@ import java.util.Map;
 import main.Region;
 import move.PlaceArmiesMove;
 import state.GlobalState;
-import strategy.IPlaceArmiesStrategy;
+import strategy.IStrategyPlaceArmies;
 import utils.MoveUtils;
 import utils.RegionUtils;
 import utils.comparator.desc.RegionWeightArmyPlacementDescComparator;
 import weight.RegionWeightArmyPlace;
 import weight.RegionWeightArmyPlace.PROP;
 
-public class SimpleArmyPlaceStrategy implements IPlaceArmiesStrategy {
+public class SimpleArmyPlaceStrategy implements IStrategyPlaceArmies {
 
 	private ArrayList<PlaceArmiesMove> moves = new ArrayList<PlaceArmiesMove>();
 

@@ -2,23 +2,32 @@ package strategy;
 
 public class Context {
 
-	private IPickStrategy strategyPick;
-	private IPlaceArmiesStrategy strategyPlaceArmies;
+	private IStrategyPick strategyPick;
+	private IStrategyPlaceArmies strategyPlaceArmies;
+	private IStrategyAttack strategyAttack;
 
-	public void setStrategyPick(IPickStrategy strategy) {
+	public void setStrategyPick(IStrategyPick strategy) {
 		this.strategyPick = strategy;
 	}
 
-	public IPickStrategy getStrategyPick() {
+	public IStrategyPick getStrategyPick() {
 		return strategyPick;
 	}
 
-	public void setStrategyPlaceArmies(IPlaceArmiesStrategy strategy) {
+	public void setStrategyPlaceArmies(IStrategyPlaceArmies strategy) {
 		this.strategyPlaceArmies = strategy;
 	}
 
-	public IPlaceArmiesStrategy getStrategyPlaceArmies() {
+	public IStrategyPlaceArmies getStrategyPlaceArmies() {
 		return strategyPlaceArmies;
+	}
+
+	public void setStrategyAttack(IStrategyAttack strategy) {
+		this.strategyAttack = strategy;
+	}
+
+	public IStrategyAttack getStrategyAttack() {
+		return strategyAttack;
 	}
 
 }

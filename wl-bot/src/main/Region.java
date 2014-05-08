@@ -29,6 +29,9 @@ public class Region extends AbstractRegion {
 	private double weightArmyPlace;
 	private double coeffArmyPlace = 1;
 
+	private double weightAttack;
+	private double coeffAttack = 1;
+
 	public void incWeightPick(int multiplier) {
 		if (GlobalState.debugPick) {
 			System.err.println(this + ": add " + multiplier + "*" + coeffPick);
@@ -57,6 +60,21 @@ public class Region extends AbstractRegion {
 
 	public void setCoeffArmyPlace(double coeff) {
 		this.coeffArmyPlace = coeff;
+	}
+
+	public void incWeightAttack(int multiplier) {
+		if (GlobalState.debugAttack) {
+			System.err.println(this + ": add " + multiplier + "*" + coeffAttack);
+		}
+		weightAttack += coeffAttack * multiplier;
+	}
+
+	public double getWeightAttack() {
+		return weightAttack;
+	}
+
+	public void setCoeffAttack(double coeff) {
+		this.coeffAttack = coeff;
 	}
 
 	private Region(SuperRegion superRegion, int id) {
