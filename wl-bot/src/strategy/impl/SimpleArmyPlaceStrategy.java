@@ -1,12 +1,18 @@
 package strategy.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 import main.Region;
 import move.PlaceArmiesMove;
+import state.GlobalState;
 import strategy.IPlaceArmiesStrategy;
+import utils.MoveUtils;
 import utils.RegionUtils;
+import utils.comparator.desc.RegionWeightArmyPlacementDescComparator;
 import weight.RegionWeightArmyPlace;
 import weight.RegionWeightArmyPlace.PROP;
 
@@ -16,6 +22,7 @@ public class SimpleArmyPlaceStrategy implements IPlaceArmiesStrategy {
 
 	@Override
 	public void execute() {
+		moves.clear();
 		LinkedList<Region> myRegions = RegionUtils.getMyRegions();
 		for (Region region : myRegions) {
 			if (region.isInner()) {
@@ -25,6 +32,50 @@ public class SimpleArmyPlaceStrategy implements IPlaceArmiesStrategy {
 			processFreeBonus(region);
 			processPossibleBonus(region);
 		}
+
+		calculateArmyPlacements();
+	}
+
+	private void calculateArmyPlacements() {
+		if (GlobalState.debugArmyPlace) {
+			System.err.println("* Placements *");
+		}
+		Map<Region, Integer> placements = new HashMap<Region, Integer>();
+		int toPlace = GlobalState.getCurrentState().getRemainingArmies();
+		double extra = 0;
+		double totalW = 0;
+		for (Region region : RegionUtils.getMyRegions()) {
+			totalW += region.getWeightArmyPlace();
+		}
+		for (Region region : RegionUtils.getMyRegions()) {
+			double temp = region.getWeightArmyPlace() * toPlace / totalW;
+			int placement = (int) Math.floor(temp);
+			extra += temp - placement;
+			placements.put(region, placement);
+			if (GlobalState.debugArmyPlace) {
+				System.err.println(region + ": place " + placement);
+			}
+		}
+		if (extra > 0) {
+			int extraInt = (int) Math.floor(extra);
+			LinkedList<Region> myRegions = RegionUtils.getMyRegions();
+			Collections.sort(myRegions, new RegionWeightArmyPlacementDescComparator());
+			Region r = myRegions.getFirst();
+			int placement = placements.get(r) + extraInt;
+			placements.put(r, placement);
+			if (GlobalState.debugArmyPlace) {
+				System.err.println(r + ": placement corrected to " + placement);
+			}
+		}
+
+		for (Region region : placements.keySet()) {
+			int value = placements.get(region);
+			if (value > 0) {
+				PlaceArmiesMove move = MoveUtils.createMove(value, region);
+				moves.add(move);
+			}
+		}
+
 	}
 
 	private void processOpponentNear(Region region) {

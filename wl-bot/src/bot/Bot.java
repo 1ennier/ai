@@ -77,10 +77,10 @@ public class Bot implements IBot {
 	@Override
 	public ArrayList<PlaceArmiesMove> getPlaceArmiesMoves(Long timeOut) {
 		context.getStrategyPlaceArmies().execute();
-		//		return context.getStrategyPlaceArmies().getMoves();
+		return context.getStrategyPlaceArmies().getMoves();
 
-		generateMoves();
-		return GlobalState.getCurrentState().getPlaceArmiesMoves();
+		//		generateMoves();
+		//		return GlobalState.getCurrentState().getPlaceArmiesMoves();
 	}
 
 	@Override
