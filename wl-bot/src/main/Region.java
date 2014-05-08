@@ -416,12 +416,19 @@ public class Region extends AbstractRegion {
 		return result;
 	}
 
+	public boolean isInMyBonus() {
+		String bonusOwner = superRegion.ownedByPlayer();
+		if (bonusOwner != null && bonusOwner.equals(GlobalState.getMyName())) {
+			return true;
+		}
+		return false;
+	}
+
 	/** Бонус данного региона свободен и открыт
 	 * 
 	 * @return */
 	public boolean isInFreeBonus() {
-		String bonusOwner = superRegion.ownedByPlayer();
-		if (bonusOwner != null && bonusOwner.equals(GlobalState.getMyName())) {
+		if (isInMyBonus()) {
 			return false;
 		}
 		for (Region subregion : superRegion.getSubRegions()) {
@@ -436,7 +443,7 @@ public class Region extends AbstractRegion {
 	 * 
 	 * @return */
 	public boolean isInPossibleFreeBonus() {
-		if (isInFreeBonus()) {
+		if (isInMyBonus() || isInFreeBonus()) {
 			return false;
 		}
 		for (Region subregion : superRegion.getSubRegions()) {
