@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import main.Region;
-import main.SuperRegion;
 import move.PlaceArmiesMove;
 import strategy.IPlaceArmiesStrategy;
 import utils.RegionUtils;
@@ -19,16 +18,12 @@ public class SimpleArmyPlaceStrategy implements IPlaceArmiesStrategy {
 	public void execute() {
 		LinkedList<Region> myRegions = RegionUtils.getMyRegions();
 		for (Region region : myRegions) {
-			processInner(region);
+			if (region.isInner()) {
+				continue;
+			}
 			processOpponentNear(region);
 			processFreeBonus(region);
 			processPossibleBonus(region);
-		}
-	}
-
-	private void processInner(Region region) {
-		if (region.isInner()) {
-			region.incWeightArmyPlace(-1000);
 		}
 	}
 
@@ -41,30 +36,26 @@ public class SimpleArmyPlaceStrategy implements IPlaceArmiesStrategy {
 	}
 
 	private void processFreeBonus(Region region) {
-		SuperRegion superRegion = region.getSuperRegion();
-		if (superRegion.isFree()) {
+		if (region.isInFreeBonus()) {
 			region.incWeightArmyPlace(RegionWeightArmyPlace.getProp(PROP.freeBonus));
 		}
 
 		LinkedList<Region> otherBonusNeighbors = region.getMyRegionOtherSuperRegionNeutralNeighbors();
 		for (Region neighbor : otherBonusNeighbors) {
-			SuperRegion neighborSuperRegion = neighbor.getSuperRegion();
-			if (neighborSuperRegion.isFree()) {
+			if (neighbor.isInFreeBonus()) {
 				region.incWeightArmyPlace(RegionWeightArmyPlace.getProp(PROP.freeBonus));
 			}
 		}
 	}
 
 	private void processPossibleBonus(Region region) {
-		SuperRegion superRegion = region.getSuperRegion();
-		if (superRegion.isPossiblyFree()) {
+		if (region.isInPossibleFreeBonus()) {
 			region.incWeightArmyPlace(RegionWeightArmyPlace.getProp(PROP.possibleBonus));
 		}
 
 		LinkedList<Region> otherBonusNeighbors = region.getMyRegionOtherSuperRegionNeutralNeighbors();
 		for (Region neighbor : otherBonusNeighbors) {
-			SuperRegion neighborSuperRegion = neighbor.getSuperRegion();
-			if (neighborSuperRegion.isPossiblyFree()) {
+			if (neighbor.isInPossibleFreeBonus()) {
 				region.incWeightArmyPlace(RegionWeightArmyPlace.getProp(PROP.possibleBonus));
 			}
 		}
