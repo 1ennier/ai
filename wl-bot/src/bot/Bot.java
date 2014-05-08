@@ -13,6 +13,7 @@ import move.PlaceArmiesMove;
 import state.GlobalState;
 import strategy.Context;
 import strategy.impl.SimpleArmyPlaceStrategy;
+import strategy.impl.SimpleAttackStrategy;
 import strategy.impl.SimplePickStrategy;
 import utils.ArmyPlaceUtils;
 import utils.AttackUtils;
@@ -66,6 +67,7 @@ public class Bot implements IBot {
 		ctx.setStrategyPick(new SimplePickStrategy());
 		ctx.setStrategyPlaceArmies(new SimpleArmyPlaceStrategy());
 		ctx.setStrategyPlaceArmies(new SimpleArmyPlaceStrategy());
+		ctx.setStrategyAttack(new SimpleAttackStrategy());
 		bot.setContext(ctx);
 		BotParser parser = new BotParser(bot);
 		parser.run();
