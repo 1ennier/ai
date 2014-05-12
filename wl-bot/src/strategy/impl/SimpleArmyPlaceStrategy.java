@@ -61,10 +61,22 @@ public class SimpleArmyPlaceStrategy implements IStrategyPlaceArmies {
 			LinkedList<Region> myRegions = RegionUtils.getMyRegions();
 			Collections.sort(myRegions, new RegionWeightArmyPlacementDescComparator());
 			Region r = myRegions.getFirst();
-			int placement = placements.get(r) + extraInt;
-			placements.put(r, placement);
-			if (GlobalState.debugArmyPlace) {
-				System.err.println(r + ": placement corrected to " + placement);
+			double maxW = r.getWeightArmyPlace();
+
+			while (extraInt > 0) {
+				for (Region region : myRegions) {
+					if (extraInt == 0) {
+						break;
+					}
+					if (region.getWeightArmyPlace() == maxW) {
+						int placement = placements.get(region) + 1;
+						placements.put(region, placement);
+						extraInt--;
+						if (GlobalState.debugArmyPlace) {
+							System.err.println(region + ": placement corrected to " + placement);
+						}
+					}
+				}
 			}
 		}
 
