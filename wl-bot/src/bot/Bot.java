@@ -66,7 +66,6 @@ public class Bot implements IBot {
 		Context ctx = new Context();
 		ctx.setStrategyPick(new SimplePickStrategy());
 		ctx.setStrategyPlaceArmies(new SimpleArmyPlaceStrategy());
-		ctx.setStrategyPlaceArmies(new SimpleArmyPlaceStrategy());
 		ctx.setStrategyAttack(new SimpleAttackStrategy());
 		bot.setContext(ctx);
 		BotParser parser = new BotParser(bot);
