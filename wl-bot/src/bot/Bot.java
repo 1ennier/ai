@@ -94,9 +94,9 @@ public class Bot implements IBot {
 	@Override
 	public ArrayList<AttackTransferMove> getAttackTransferMoves(Long timeOut) {
 		context.getStrategyAttack().execute();
-		//		return context.getStrategyAttack().getMoves();
+		return context.getStrategyAttack().getMoves();
 
-		return GlobalState.getCurrentState().getAttackTransferMoves();
+		//		return GlobalState.getCurrentState().getAttackTransferMoves();
 	}
 
 	private void generateMoves() {

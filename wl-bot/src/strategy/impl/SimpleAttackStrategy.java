@@ -5,8 +5,10 @@ import java.util.LinkedList;
 
 import main.Region;
 import move.AttackTransferMove;
+import move.AttackTransferMove.MOVE_TYPE;
 import state.GlobalState;
 import strategy.IStrategyAttack;
+import utils.AttackUtils;
 import utils.RegionUtils;
 import weight.RegionWeightAttack;
 import weight.RegionWeightAttack.PROP;
@@ -24,13 +26,19 @@ public class SimpleAttackStrategy implements IStrategyAttack {
 			processRegionAttackWeight(region);
 		}
 
-		calculateAttacks();
-
+		if (GlobalState.debugAttack) {
+			System.err.println("* Attack weights *");
+		}
 		if (GlobalState.debugAttack) {
 			for (Region region : visibleRegions) {
 				System.err.println(region + ": attack weight is " + region.getWeightAttack());
 			}
 		}
+
+		if (GlobalState.debugAttack) {
+			System.err.println("* Attacks *");
+		}
+		calculateAttacks();
 	}
 
 	private void processRegionAttackWeight(Region region) {
@@ -56,9 +64,6 @@ public class SimpleAttackStrategy implements IStrategyAttack {
 	}
 
 	private void calculateAttacks() {
-		if (GlobalState.debugAttack) {
-			System.err.println("* Attacks *");
-		}
 		LinkedList<Region> myRegions = RegionUtils.getMyRegions();
 		for (Region myRegion : myRegions) {
 			if (myRegion.getFreeArmies() == 0) {
@@ -72,8 +77,28 @@ public class SimpleAttackStrategy implements IStrategyAttack {
 				maxW = Math.max(maxW, weight);
 			}
 
-		}
+			for (Region neighbor : neighbors) {
+				double weight = neighbor.getWeightAttack();
+				if (weight == maxW) {
+					addAttack(myRegion, neighbor);
+				}
+			}
 
+		}
+	}
+
+	private void addAttack(Region my, Region to) {
+		if (AttackUtils.needAttack(my, to, to.ownedByPlayer(GlobalState.getNeutralName()))) {
+			int armiesToAttack = my.getFreeArmies();
+			moves.add(RegionUtils.createMove(armiesToAttack, my, to, MOVE_TYPE.LAST));
+			if (GlobalState.debugAttack) {
+				System.err.println("Attack from " + my + " to " + to + " with " + armiesToAttack);
+			}
+		} else {
+			if (GlobalState.debugAttack) {
+				System.err.println("Attack not needed from " + my + " to " + to);
+			}
+		}
 	}
 
 	@Override
