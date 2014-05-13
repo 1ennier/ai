@@ -3,8 +3,6 @@ package main;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import state.GlobalState;
-
 public class SuperRegion extends AbstractRegion {
 
 	private int armiesReward;
@@ -46,8 +44,7 @@ public class SuperRegion extends AbstractRegion {
 		Iterator<Region> it = unknown.iterator();
 		while (it.hasNext()) {
 			Region region = it.next();
-			if (region.ownedByPlayer(GlobalState.getMyName()) || region.ownedByPlayer(GlobalState.getOpponentName())
-					|| region.ownedByPlayer(GlobalState.getNeutralName())) {
+			if (region.isMy() || region.isOpponent() || region.isNeutral()) {
 				it.remove();
 			}
 		}
@@ -57,7 +54,7 @@ public class SuperRegion extends AbstractRegion {
 	public int getNeutralArmies() {
 		int armies = 0;
 		for (Region region : subRegions) {
-			if (region.ownedByPlayer(GlobalState.getNeutralName())) {
+			if (region.isNeutral()) {
 				armies += region.getArmies();
 			}
 		}
@@ -84,7 +81,7 @@ public class SuperRegion extends AbstractRegion {
 	 * @return */
 	public boolean isFree() {
 		for (Region subregion : subRegions) {
-			if (!subregion.ownedByPlayer(GlobalState.getNeutralName())) {
+			if (!subregion.isNeutral()) {
 				return false;
 			}
 		}
@@ -96,7 +93,7 @@ public class SuperRegion extends AbstractRegion {
 	 * @return */
 	public boolean isPossiblyFree() {
 		for (Region subregion : subRegions) {
-			if (!subregion.ownedByPlayer(GlobalState.getNeutralName()) && !subregion.ownedByPlayer(GlobalState.getUnknownName())) {
+			if (!subregion.isNeutral() && !subregion.isUnknown()) {
 				return false;
 			}
 		}

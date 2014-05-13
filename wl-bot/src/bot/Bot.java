@@ -174,7 +174,7 @@ public class Bot implements IBot {
 			Iterator<Region> it = opponents.iterator();
 			while (it.hasNext()) {
 				Region opponent = it.next();
-				if (AttackUtils.needAttack(region, opponent, isNeutral)) {
+				if (AttackUtils.needAttack(region, opponent)) {
 					if (GlobalState.getCurrentState().getAttackedRegions().contains(opponent) && isNeutral) {
 						continue;
 					}

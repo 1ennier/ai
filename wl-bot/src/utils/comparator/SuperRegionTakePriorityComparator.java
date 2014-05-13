@@ -5,7 +5,6 @@ import java.util.LinkedList;
 
 import main.Region;
 import main.SuperRegion;
-import state.GlobalState;
 
 public class SuperRegionTakePriorityComparator implements Comparator<SuperRegion> {
 
@@ -42,7 +41,7 @@ public class SuperRegionTakePriorityComparator implements Comparator<SuperRegion
 	private int getNeutralsCount(SuperRegion superRegion) {
 		int neutrals = 0;
 		for (Region region : superRegion.getSubRegions()) {
-			if (region.ownedByPlayer(GlobalState.getNeutralName())) {
+			if (region.isNeutral()) {
 				neutrals += region.getArmies();
 			}
 		}

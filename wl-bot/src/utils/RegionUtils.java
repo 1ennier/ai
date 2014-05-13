@@ -21,9 +21,9 @@ public class RegionUtils extends MyRegionUtils {
 	public static LinkedList<Region> getRegionsToTakeBySuperRegion(SuperRegion superRegion) {
 		LinkedList<Region> regionsToTake = new LinkedList<Region>();
 		for (Region region : superRegion.getSubRegions()) {
-			if (region.ownedByPlayer(GlobalState.getNeutralName())) {
+			if (region.isNeutral()) {
 				for (Region neutralRegionNeighbor : region.getNeighbors()) {
-					if (neutralRegionNeighbor.ownedByPlayer(GlobalState.getMyName()) && !regionsToTake.contains(region)) {
+					if (neutralRegionNeighbor.isMy() && !regionsToTake.contains(region)) {
 						regionsToTake.add(region);
 						break;
 					}
@@ -41,7 +41,7 @@ public class RegionUtils extends MyRegionUtils {
 		LinkedList<Region> myRegions = new LinkedList<Region>();
 		for (Region region : regions) {
 			for (Region neighbor : region.getNeighbors()) {
-				if (neighbor.ownedByPlayer(GlobalState.getMyName()) && !myRegions.contains(neighbor)) {
+				if (neighbor.isMy() && !myRegions.contains(neighbor)) {
 					myRegions.add(neighbor);
 				}
 			}
@@ -52,7 +52,7 @@ public class RegionUtils extends MyRegionUtils {
 	public static LinkedList<Region> getMyNeighborsOfRegion(Region region) {
 		LinkedList<Region> myRegions = new LinkedList<Region>();
 		for (Region neighbor : region.getNeighbors()) {
-			if (neighbor.ownedByPlayer(GlobalState.getMyName()) && !myRegions.contains(neighbor)) {
+			if (neighbor.isMy() && !myRegions.contains(neighbor)) {
 				myRegions.add(neighbor);
 			}
 		}
@@ -76,11 +76,11 @@ public class RegionUtils extends MyRegionUtils {
 			boolean opponentFound = false;
 			boolean neutralFound = false;
 			for (Region region : regions) {
-				if (region.ownedByPlayer(GlobalState.getOpponentName())) {
+				if (region.isOpponent()) {
 					opponentFound = true;
 					break;
 				}
-				if (region.ownedByPlayer(GlobalState.getNeutralName())) {
+				if (region.isNeutral()) {
 					neutralFound = true;
 				}
 			}
@@ -117,7 +117,7 @@ public class RegionUtils extends MyRegionUtils {
 				continue;
 			}
 
-			if (region.ownedByPlayer(GlobalState.getMyName())) {
+			if (region.isMy()) {
 				GlobalState.getCurrentState().getPlaceArmiesMoves().add(createMove(armies, region));
 			}
 		}
@@ -159,8 +159,7 @@ public class RegionUtils extends MyRegionUtils {
 
 	public static RegionAttackInfo getRegionAttackInfo(Region regionToTake) {
 		for (Region neighbor : regionToTake.getNeighbors()) {
-			if (neighbor.ownedByPlayer(GlobalState.getMyName()) && neighbor.getArmies() > 2
-					&& AttackUtils.isFreeArmiesEnoughToAttack(neighbor.getFreeArmies(), regionToTake.getArmies())) {
+			if (neighbor.isMy() && neighbor.getArmies() > 2 && AttackUtils.isFreeArmiesEnoughToAttack(neighbor.getFreeArmies(), regionToTake.getArmies())) {
 				int armiesToAttack = AttackUtils.getNeededArmiesToAttack(regionToTake.getArmies());
 				if (armiesToAttack > neighbor.getFreeArmies()) {
 					armiesToAttack = neighbor.getFreeArmies();

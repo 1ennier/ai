@@ -49,10 +49,6 @@ public class SimpleArmyPlaceStrategy implements IStrategyPlaceArmies {
 			totalW += region.getWeightArmyPlace();
 		}
 		for (Region region : RegionUtils.getMyRegions()) {
-			if (AttackUtils.hasEnoughArmiesToAttack(region)) {
-				continue;
-			}
-
 			double temp = region.getWeightArmyPlace() * toPlace / totalW;
 			int placement = (int) Math.floor(temp);
 			extra += temp - placement;
@@ -96,7 +92,7 @@ public class SimpleArmyPlaceStrategy implements IStrategyPlaceArmies {
 	}
 
 	private void processOpponentNear(Region region) {
-		if (region.hasOpponentNeighbor()) {
+		if (!AttackUtils.hasEnoughArmiesToAttack(region) && region.hasOpponentNeighbor()) {
 			double coeff = 1;
 			region.setCoeffArmyPlace(coeff);
 			region.incWeightArmyPlace(RegionWeightArmyPlace.getProp(PROP.opponentNear));
@@ -104,27 +100,31 @@ public class SimpleArmyPlaceStrategy implements IStrategyPlaceArmies {
 	}
 
 	private void processFreeBonus(Region region) {
-		if (region.isInFreeBonus()) {
-			region.incWeightArmyPlace(RegionWeightArmyPlace.getProp(PROP.freeBonus));
-		}
-
-		LinkedList<Region> otherBonusNeighbors = region.getMyRegionOtherSuperRegionNeutralNeighbors();
-		for (Region neighbor : otherBonusNeighbors) {
-			if (neighbor.isInFreeBonus()) {
+		if (!AttackUtils.hasEnoughArmiesToAttack(region)) {
+			if (region.isInFreeBonus()) {
 				region.incWeightArmyPlace(RegionWeightArmyPlace.getProp(PROP.freeBonus));
+			}
+
+			LinkedList<Region> otherBonusNeighbors = region.getMyRegionOtherSuperRegionNeutralNeighbors();
+			for (Region neighbor : otherBonusNeighbors) {
+				if (neighbor.isInFreeBonus()) {
+					region.incWeightArmyPlace(RegionWeightArmyPlace.getProp(PROP.freeBonus));
+				}
 			}
 		}
 	}
 
 	private void processPossibleBonus(Region region) {
-		if (region.isInPossibleFreeBonus()) {
-			region.incWeightArmyPlace(RegionWeightArmyPlace.getProp(PROP.possibleBonus));
-		}
-
-		LinkedList<Region> otherBonusNeighbors = region.getMyRegionOtherSuperRegionNeutralNeighbors();
-		for (Region neighbor : otherBonusNeighbors) {
-			if (neighbor.isInPossibleFreeBonus()) {
+		if (!AttackUtils.hasEnoughArmiesToAttack(region)) {
+			if (region.isInPossibleFreeBonus()) {
 				region.incWeightArmyPlace(RegionWeightArmyPlace.getProp(PROP.possibleBonus));
+			}
+
+			LinkedList<Region> otherBonusNeighbors = region.getMyRegionOtherSuperRegionNeutralNeighbors();
+			for (Region neighbor : otherBonusNeighbors) {
+				if (neighbor.isInPossibleFreeBonus()) {
+					region.incWeightArmyPlace(RegionWeightArmyPlace.getProp(PROP.possibleBonus));
+				}
 			}
 		}
 	}

@@ -257,7 +257,7 @@ public class BotParser {
 				break;
 			}
 			Region region = GlobalState.getCurrentState().getVisibleMap().getRegion(id);
-			if (region != null && region.ownedByPlayer(GlobalState.getMyName())) {
+			if (region != null && region.isMy()) {
 				myCount++;
 				continue;
 			}

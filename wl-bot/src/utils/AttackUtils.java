@@ -7,8 +7,8 @@ import state.GlobalState;
 
 public class AttackUtils {
 
-	public static boolean needAttack(Region myRegion, Region opponentRegion, boolean isNeutral) {
-		if (isNeutral && myRegion.hasOpponentNeighbor()) {
+	public static boolean needAttack(Region myRegion, Region opponentRegion) {
+		if (opponentRegion.isNeutral() && myRegion.hasOpponentNeighbor()) {
 			return false;
 		}
 
@@ -16,8 +16,7 @@ public class AttackUtils {
 	}
 
 	public static boolean isEnoughToAttack(int myFreeArmies, Region opponentRegion) {
-		int toAttack = opponentRegion.ownedByPlayer(GlobalState.getNeutralName()) ? getNeutralArmiesCanAttack(myFreeArmies)
-				: getOpponentArmiesToAttack(myFreeArmies);
+		int toAttack = opponentRegion.isNeutral() ? getNeutralArmiesCanAttack(myFreeArmies) : getOpponentArmiesToAttack(myFreeArmies);
 		return opponentRegion.getArmies() <= toAttack;
 	}
 
@@ -44,14 +43,16 @@ public class AttackUtils {
 		int myFreeArmies = myRegion.getFreeArmies();
 		LinkedList<Region> neighbors = myRegion.getNeighbors();
 		for (Region neighbor : neighbors) {
+			if (neighbor.isMy()) {
+				continue;
+			}
 			if (myFreeArmies <= 0) {
 				allAttacked = false;
 				break;
 			}
-			int armiesThatICanAttack = neighbor.ownedByPlayer(GlobalState.getNeutralName()) ? getNeutralArmiesCanAttack(myFreeArmies)
-					: getOpponentArmiesCanAttack(myFreeArmies);
+			int armiesThatICanAttack = neighbor.isNeutral() ? getNeutralArmiesCanAttack(myFreeArmies) : getOpponentArmiesCanAttack(myFreeArmies);
 			int unattackedArmies = neighbor.getArmies() - armiesThatICanAttack;
-			if (unattackedArmies == 0) {
+			if (unattackedArmies <= 0) {
 				myFreeArmies -= getNeededArmiesToAttack(neighbor.getArmies());
 			} else {
 				allAttacked = false;

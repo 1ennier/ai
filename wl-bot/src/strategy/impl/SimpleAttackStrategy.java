@@ -44,11 +44,11 @@ public class SimpleAttackStrategy implements IStrategyAttack {
 	}
 
 	private void processRegionAttackWeight(Region region) {
-		if (region.ownedByPlayer(GlobalState.getOpponentName())) {
+		if (region.isOpponent()) {
 			double coeff = 1;
 			region.setCoeffAttack(coeff);
 			region.incWeightAttack(RegionWeightAttack.getProp(PROP.opponent));
-		} else if (region.ownedByPlayer(GlobalState.getNeutralName())) {
+		} else if (region.isNeutral()) {
 			if (region.isInFreeBonus()) {
 				double coeff = 1;
 				region.setCoeffAttack(coeff);
@@ -87,10 +87,9 @@ public class SimpleAttackStrategy implements IStrategyAttack {
 
 	private boolean addAttack(Region my, Region to) {
 		boolean result = false;
-		boolean isNeutral = to.ownedByPlayer(GlobalState.getNeutralName());
-		if (AttackUtils.needAttack(my, to, isNeutral)) {
+		if (AttackUtils.needAttack(my, to)) {
 			int armiesToAttack = my.getFreeArmies();
-			if (isNeutral) {
+			if (to.isNeutral()) {
 				int need = AttackUtils.getNeededArmiesToAttackNeutral(to.getArmies());
 				if (need < armiesToAttack) {
 					armiesToAttack = need;

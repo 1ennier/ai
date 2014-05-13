@@ -32,6 +32,22 @@ public class Region extends AbstractRegion {
 	private double weightAttack;
 	private double coeffAttack = 1;
 
+	public boolean isNeutral() {
+		return ownedByPlayer(GlobalState.getNeutralName());
+	}
+
+	public boolean isMy() {
+		return ownedByPlayer(GlobalState.getMyName());
+	}
+
+	public boolean isOpponent() {
+		return ownedByPlayer(GlobalState.getOpponentName());
+	}
+
+	public boolean isUnknown() {
+		return ownedByPlayer(GlobalState.getUnknownName());
+	}
+
 	public void incWeightPick(int multiplier) {
 		if (GlobalState.debugPick) {
 			System.err.println(this + ": add " + multiplier + "*" + coeffPick);
@@ -190,7 +206,7 @@ public class Region extends AbstractRegion {
 
 	public boolean hasOpponentNeighbor() {
 		for (Region region : neighbors) {
-			if (region.ownedByPlayer(GlobalState.getOpponentName())) {
+			if (region.isOpponent()) {
 				return true;
 			}
 		}
@@ -199,7 +215,7 @@ public class Region extends AbstractRegion {
 
 	public boolean hasNeutralNeighbor() {
 		for (Region region : neighbors) {
-			if (region.ownedByPlayer(GlobalState.getNeutralName())) {
+			if (region.isNeutral()) {
 				return true;
 			}
 		}
@@ -208,7 +224,7 @@ public class Region extends AbstractRegion {
 
 	public boolean isInner() {
 		for (Region region : neighbors) {
-			if (!region.ownedByPlayer(GlobalState.getMyName())) {
+			if (!region.isMy()) {
 				return false;
 			}
 		}
@@ -252,7 +268,7 @@ public class Region extends AbstractRegion {
 		Iterator<Region> it = neutralNeighbors.iterator();
 		while (it.hasNext()) {
 			Region neighbor = it.next();
-			if (neighbor.ownedByPlayer(GlobalState.getMyName()) || neighbor.ownedByPlayer(GlobalState.getOpponentName())) {
+			if (neighbor.isMy() || neighbor.isOpponent()) {
 				it.remove();
 			}
 		}
@@ -264,8 +280,7 @@ public class Region extends AbstractRegion {
 		Iterator<Region> it = neutralNeighbors.iterator();
 		while (it.hasNext()) {
 			Region neighbor = it.next();
-			if (neighbor.ownedByPlayer(GlobalState.getMyName()) || neighbor.ownedByPlayer(GlobalState.getOpponentName())
-					|| !neighbor.getSuperRegion().equals(superRegion)) {
+			if (neighbor.isMy() || neighbor.isOpponent() || !neighbor.getSuperRegion().equals(superRegion)) {
 				it.remove();
 			}
 		}
@@ -277,8 +292,7 @@ public class Region extends AbstractRegion {
 		Iterator<Region> it = neutralNeighbors.iterator();
 		while (it.hasNext()) {
 			Region neighbor = it.next();
-			if (neighbor.ownedByPlayer(GlobalState.getMyName()) || neighbor.ownedByPlayer(GlobalState.getOpponentName())
-					|| neighbor.getSuperRegion().equals(superRegion)) {
+			if (neighbor.isMy() || neighbor.isOpponent() || neighbor.getSuperRegion().equals(superRegion)) {
 				it.remove();
 			}
 		}
@@ -290,7 +304,7 @@ public class Region extends AbstractRegion {
 		Iterator<Region> it = opponentNeighbors.iterator();
 		while (it.hasNext()) {
 			Region neighbor = it.next();
-			if (!neighbor.ownedByPlayer(GlobalState.getOpponentName())) {
+			if (!neighbor.isOpponent()) {
 				it.remove();
 			}
 		}
@@ -314,7 +328,7 @@ public class Region extends AbstractRegion {
 		Iterator<Region> it = regionNeighbors.iterator();
 		while (it.hasNext()) {
 			Region neighbor = it.next();
-			if (neighbor.ownedByPlayer(GlobalState.getMyName())) {
+			if (neighbor.isMy()) {
 				it.remove();
 			}
 		}
@@ -326,7 +340,7 @@ public class Region extends AbstractRegion {
 		Iterator<Region> it = myRegionsNear.iterator();
 		while (it.hasNext()) {
 			Region myRegion = it.next();
-			if (!myRegion.ownedByPlayer(GlobalState.getMyName())) {
+			if (!myRegion.isMy()) {
 				it.remove();
 			}
 		}
@@ -402,7 +416,7 @@ public class Region extends AbstractRegion {
 		Iterator<Region> it = myNeighbors.iterator();
 		while (it.hasNext()) {
 			Region neighbor = it.next();
-			if (neighbor.ownedByPlayer(GlobalState.getMyName())) {
+			if (neighbor.isMy()) {
 				it.remove();
 			}
 		}
@@ -415,7 +429,7 @@ public class Region extends AbstractRegion {
 	public int getOpponentArmies(LinkedList<Region> regions) {
 		int armies = 0;
 		for (Region neighbor : neighbors) {
-			if (neighbor.ownedByPlayer(GlobalState.getOpponentName())) {
+			if (neighbor.isOpponent()) {
 				armies += neighbor.getArmies();
 			}
 		}
@@ -430,6 +444,9 @@ public class Region extends AbstractRegion {
 		}
 		if (GlobalState.debugArmyPlace) {
 			result += " [ap:" + weightArmyPlace + "]";
+		}
+		if (GlobalState.debugAttack) {
+			result += " [at:" + weightAttack + "]";
 		}
 		return result;
 	}
@@ -450,7 +467,7 @@ public class Region extends AbstractRegion {
 			return false;
 		}
 		for (Region subregion : superRegion.getSubRegions()) {
-			if (!subregion.ownedByPlayer(GlobalState.getMyName()) && !subregion.ownedByPlayer(GlobalState.getNeutralName())) {
+			if (!subregion.isMy() && !subregion.isNeutral()) {
 				return false;
 			}
 		}
@@ -465,7 +482,7 @@ public class Region extends AbstractRegion {
 			return false;
 		}
 		for (Region subregion : superRegion.getSubRegions()) {
-			if (subregion.ownedByPlayer(GlobalState.getOpponentName())) {
+			if (subregion.isOpponent()) {
 				return false;
 			}
 		}

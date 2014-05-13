@@ -14,7 +14,7 @@ public class MyRegionUtils extends MoveUtils {
 		LinkedList<Region> myRegions = new LinkedList<Region>();
 		LinkedList<Region> allRegions = GlobalState.getCurrentState().getVisibleMap().getRegions();
 		for (Region region : allRegions) {
-			if (region.ownedByPlayer(GlobalState.getMyName())) {
+			if (region.isMy()) {
 				myRegions.add(region);
 			}
 		}
@@ -28,7 +28,7 @@ public class MyRegionUtils extends MoveUtils {
 		LinkedList<Region> myInnerRegions = new LinkedList<Region>();
 		LinkedList<Region> allRegions = GlobalState.getCurrentState().getVisibleMap().getRegions();
 		for (Region region : allRegions) {
-			if (region.ownedByPlayer(GlobalState.getMyName()) && region.isInner()) {
+			if (region.isMy() && region.isInner()) {
 				myInnerRegions.add(region);
 			}
 		}
@@ -42,7 +42,7 @@ public class MyRegionUtils extends MoveUtils {
 		LinkedList<Region> myRegions = new LinkedList<Region>();
 		LinkedList<Region> allRegions = GlobalState.getCurrentState().getVisibleMap().getRegions();
 		for (Region region : allRegions) {
-			if (region.ownedByPlayer(GlobalState.getMyName()) && region.hasOpponentNeighbor()) {
+			if (region.isMy() && region.hasOpponentNeighbor()) {
 				myRegions.add(region);
 			}
 		}
@@ -56,7 +56,7 @@ public class MyRegionUtils extends MoveUtils {
 		LinkedList<Region> myBorderRegions = new LinkedList<Region>();
 		LinkedList<Region> allRegions = GlobalState.getCurrentState().getVisibleMap().getRegions();
 		for (Region region : allRegions) {
-			if (region.ownedByPlayer(GlobalState.getMyName()) && region.hasNeutralNeighbor()) {
+			if (region.isMy() && region.hasNeutralNeighbor()) {
 				myBorderRegions.add(region);
 			}
 		}
