@@ -1,5 +1,7 @@
 package utils;
 
+import java.util.LinkedList;
+
 import main.Region;
 import state.GlobalState;
 
@@ -14,13 +16,49 @@ public class AttackUtils {
 	}
 
 	public static boolean isEnoughToAttack(int myFreeArmies, Region opponentRegion) {
-		return opponentRegion.getArmies() <= getOpponentArmiesToAttack(myFreeArmies);
+		int toAttack = opponentRegion.ownedByPlayer(GlobalState.getNeutralName()) ? getNeutralArmiesCanAttack(myFreeArmies)
+				: getOpponentArmiesToAttack(myFreeArmies);
+		return opponentRegion.getArmies() <= toAttack;
 	}
 
 	private static int getOpponentArmiesToAttack(int myFreeArmies) {
 		int roundNumber = GlobalState.getCurrentState().getRoundNumber();
 		double k = Math.pow(roundNumber, 0.5);
 		return Math.max((int) Math.ceil((1.01 * k - 1) / k * myFreeArmies) - GlobalState.getCurrentState().getStartingArmies(), 0);
+	}
+
+	public static int getNeutralArmiesCanAttack(int myFreeArmies) {
+		return (int) Math.round(0.99 * myFreeArmies / 2);
+	}
+
+	public static int getNeededArmiesToAttackNeutral(int neutralArmies) {
+		return (int) Math.round(neutralArmies * 1.8 - 1);
+	}
+
+	public static int getOpponentArmiesCanAttack(int myFreeArmies) {
+		return getNeutralArmiesCanAttack(myFreeArmies) + 5;//TODO
+	}
+
+	public static boolean hasEnoughArmiesToAttack(Region myRegion) {
+		boolean allAttacked = true;
+		int myFreeArmies = myRegion.getFreeArmies();
+		LinkedList<Region> neighbors = myRegion.getNeighbors();
+		for (Region neighbor : neighbors) {
+			if (myFreeArmies <= 0) {
+				allAttacked = false;
+				break;
+			}
+			int armiesThatICanAttack = neighbor.ownedByPlayer(GlobalState.getNeutralName()) ? getNeutralArmiesCanAttack(myFreeArmies)
+					: getOpponentArmiesCanAttack(myFreeArmies);
+			int unattackedArmies = neighbor.getArmies() - armiesThatICanAttack;
+			if (unattackedArmies == 0) {
+				myFreeArmies -= getNeededArmiesToAttack(neighbor.getArmies());
+			} else {
+				allAttacked = false;
+				break;
+			}
+		}
+		return allAttacked && myFreeArmies >= 0;
 	}
 
 	public static boolean isFreeArmiesEnoughToAttack(int myArmiesCount, int opponentArmiesCount) {

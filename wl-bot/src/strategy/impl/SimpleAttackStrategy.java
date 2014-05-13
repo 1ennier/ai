@@ -1,6 +1,7 @@
 package strategy.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 
 import main.Region;
@@ -10,6 +11,7 @@ import state.GlobalState;
 import strategy.IStrategyAttack;
 import utils.AttackUtils;
 import utils.RegionUtils;
+import utils.comparator.desc.RegionWeightAttackDescComparator;
 import weight.RegionWeightAttack;
 import weight.RegionWeightAttack.PROP;
 
@@ -69,36 +71,43 @@ public class SimpleAttackStrategy implements IStrategyAttack {
 			if (myRegion.getFreeArmies() == 0) {
 				continue;
 			}
+
 			LinkedList<Region> neighbors = myRegion.getNeighbors();
-			double maxW = 0;
+			Collections.sort(neighbors, new RegionWeightAttackDescComparator());
 
 			for (Region neighbor : neighbors) {
-				double weight = neighbor.getWeightAttack();
-				maxW = Math.max(maxW, weight);
-			}
-
-			for (Region neighbor : neighbors) {
-				double weight = neighbor.getWeightAttack();
-				if (weight == maxW) {
-					addAttack(myRegion, neighbor);
+				addAttack(myRegion, neighbor);
+				if (myRegion.getFreeArmies() == 0) {
+					break;
 				}
 			}
 
 		}
 	}
 
-	private void addAttack(Region my, Region to) {
-		if (AttackUtils.needAttack(my, to, to.ownedByPlayer(GlobalState.getNeutralName()))) {
+	private boolean addAttack(Region my, Region to) {
+		boolean result = false;
+		boolean isNeutral = to.ownedByPlayer(GlobalState.getNeutralName());
+		if (AttackUtils.needAttack(my, to, isNeutral)) {
 			int armiesToAttack = my.getFreeArmies();
+			if (isNeutral) {
+				int need = AttackUtils.getNeededArmiesToAttackNeutral(to.getArmies());
+				if (need < armiesToAttack) {
+					armiesToAttack = need;
+				}
+			}
+
 			moves.add(RegionUtils.createMove(armiesToAttack, my, to, MOVE_TYPE.LAST));
 			if (GlobalState.debugAttack) {
 				System.err.println("Attack from " + my + " to " + to + " with " + armiesToAttack);
 			}
+			result = true;
 		} else {
 			if (GlobalState.debugAttack) {
 				System.err.println("Attack not needed from " + my + " to " + to);
 			}
 		}
+		return result;
 	}
 
 	@Override

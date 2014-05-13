@@ -10,6 +10,7 @@ import main.Region;
 import move.PlaceArmiesMove;
 import state.GlobalState;
 import strategy.IStrategyPlaceArmies;
+import utils.AttackUtils;
 import utils.MoveUtils;
 import utils.RegionUtils;
 import utils.comparator.desc.RegionWeightArmyPlacementDescComparator;
@@ -48,6 +49,10 @@ public class SimpleArmyPlaceStrategy implements IStrategyPlaceArmies {
 			totalW += region.getWeightArmyPlace();
 		}
 		for (Region region : RegionUtils.getMyRegions()) {
+			if (AttackUtils.hasEnoughArmiesToAttack(region)) {
+				continue;
+			}
+
 			double temp = region.getWeightArmyPlace() * toPlace / totalW;
 			int placement = (int) Math.floor(temp);
 			extra += temp - placement;
