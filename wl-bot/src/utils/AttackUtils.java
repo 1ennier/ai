@@ -32,7 +32,7 @@ public class AttackUtils {
 	}
 
 	public static int getNeededArmiesToAttackNeutral(int neutralArmies) {
-		return (int) Math.round(neutralArmies * 1.8 - 1);
+		return (int) Math.round(neutralArmies * 1.8);
 	}
 
 	public static int getOpponentArmiesCanAttack(int myFreeArmies) {
