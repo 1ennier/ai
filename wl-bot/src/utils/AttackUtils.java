@@ -8,8 +8,12 @@ import state.GlobalState;
 public class AttackUtils {
 
 	public static boolean needAttack(Region myRegion, Region opponentRegion) {
-		if (opponentRegion.isNeutral() && myRegion.hasOpponentNeighbor()) {
+		if ((opponentRegion.isNeutral() || opponentRegion.isMy()) && myRegion.hasOpponentNeighbor()) {
 			return false;
+		}
+
+		if (opponentRegion.isMy() && myRegion.isInner()) {
+			return true;
 		}
 
 		return isEnoughToAttack(myRegion.getFreeArmies(), opponentRegion);

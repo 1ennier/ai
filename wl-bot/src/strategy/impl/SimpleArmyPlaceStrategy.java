@@ -58,7 +58,7 @@ public class SimpleArmyPlaceStrategy implements IStrategyPlaceArmies {
 			}
 		}
 		if (extra > 0) {
-			int extraInt = (int) Math.floor(extra);
+			int extraInt = (int) Math.round(extra);
 			LinkedList<Region> myRegions = RegionUtils.getMyRegions();
 			Collections.sort(myRegions, new RegionWeightArmyPlacementDescComparator());
 			Region r = myRegions.getFirst();
