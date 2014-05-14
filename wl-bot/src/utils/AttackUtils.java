@@ -12,7 +12,7 @@ public class AttackUtils {
 			return false;
 		}
 
-		if (opponentRegion.isMy() && myRegion.isInner()) {
+		if (opponentRegion.isMy() && (myRegion.isInner() || (!myRegion.hasOpponentNeighbor() && myRegion.getArmies() < opponentRegion.getArmies()))) {
 			return true;
 		}
 
@@ -26,7 +26,7 @@ public class AttackUtils {
 
 	private static int getOpponentArmiesToAttack(int myFreeArmies) {
 		int roundNumber = GlobalState.getCurrentState().getRoundNumber();
-		double k = Math.pow(roundNumber, 0.5);
+		double k = Math.pow(roundNumber, 0.7);
 		return Math.max((int) Math.ceil((1.01 * k - 1) / k * myFreeArmies) - GlobalState.getCurrentState().getStartingArmies(), 0);
 	}
 

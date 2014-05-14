@@ -58,9 +58,9 @@ public class Bot implements IBot {
 		RegionWeightArmyPlace.initManually();
 		RegionWeightAttack.initManually();
 
-		GlobalState.debug = true;
+		//		GlobalState.debug = true;
 		//		GlobalState.debugArmyPlace = true;
-		GlobalState.debugAttack = true;
+		//		GlobalState.debugAttack = true;
 
 		Bot bot = new Bot();
 		Context ctx = new Context();
